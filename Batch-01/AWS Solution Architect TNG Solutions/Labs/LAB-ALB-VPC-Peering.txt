@@ -1,0 +1,26 @@
+Lab Application Load Balancer and VPC Peering:
+
+Create:
+	1. 1 Application Load Balancer
+	2. Create 2 Target groups(TG1 and TG2) and add target(Instance1 and Instance2) 
+
+
+ABC Company has resoources in us-east-1(Virginia) and us-east2(Ohio)
+
+	Create vpc peering with 2 vpcs' in below 2 regions
+
+
+		us-east-1(Virginia) - VPCA
+			- EC2 called LinuxServerA
+	
+
+
+		us-east2(Ohio)  - VPCB
+			- EC2 called LinuxServerB	
+			
+			
+	1. Created an EC2 Instance in both region vpc
+	2. Added respective VPC CIDR Block to both region Route Tables
+	3. Add Route in Security Group
+	4. ssh into LinuxServerA and ping Private IP of LinuxServerB	
+	5. ssh into LinuxServerB and ping Private IP of LinuxServerA

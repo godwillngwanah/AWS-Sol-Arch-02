@@ -1,0 +1,8 @@
+LAB Ec2 Instance and bootsrtap
+
+	1.	Create a windows instance in the EC2 console and log in;
+		a.	For linux Configure security group to allow SSH protocol
+		b.	For windows allow RDP login
+			c.	Install httpd and access using DNS name
+	2.	Create a bootstrapped instance using MyBootstrapScript.txt
+		a.	Test by accessing on the public web

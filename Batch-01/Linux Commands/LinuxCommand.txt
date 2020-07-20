@@ -1,0 +1,9 @@
+get memory - $free (-m, -g), $vmstat -s
+get cpu - $lscpu, $nproc
+get software installed - $rpm -qa | less
+
+
+
+
+List All Commands
+$compgen -c
