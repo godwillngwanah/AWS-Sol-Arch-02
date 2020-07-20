@@ -1,0 +1,9 @@
+LAB Route53:
+	1.	Create web application – WordPress website – Hello World
+	2.	Make sure SG is configured for web access
+	3.	Create a Load balancer
+	4.	Create a Target Group
+	5.	Create a hosted zone in Route53
+	6.	Configure out domain to host our web application
+		a.	Public IP Address of our web server.
+		b.	DNS of our Load balancer.

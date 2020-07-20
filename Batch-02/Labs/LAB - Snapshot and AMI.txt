@@ -1,0 +1,8 @@
+LAB - Snapshots and AMI
+
+	1. Create a new EC2 Instance in us-east-1
+	2. From newly created EC2 Instance create a new snapshot
+	3. Create a new EBS volume From newly created Snapshot
+	4. Create a new AMI from same snapshot
+	5. Copy same snapshot to another region us-east-2 region
+	6. Copy new Created AMI to us-east-2

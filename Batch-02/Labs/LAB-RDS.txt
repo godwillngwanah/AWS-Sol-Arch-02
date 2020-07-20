@@ -1,0 +1,14 @@
+LAB - RDS (Relational Database management Service)
+
+Task: Create a MySQL DB and connect using datagrid
+
+	1. Navigate to Amazon RDS web service 
+	2. Create database, and chose mysql (select free tier)
+	3. Give database name as mysqldb, user as admin, password as Admin123
+	4. Be sure to enable public access
+	5. Create db
+	6. Navigate to security group under newly created database and ensure it allows public access to database
+	7. Open datagrid 
+	8. Connect using database parameters
+	9. Take snapshot of database 
+	10. Delete database including snapshots
