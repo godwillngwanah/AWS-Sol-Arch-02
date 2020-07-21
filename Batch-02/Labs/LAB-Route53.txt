@@ -1,9 +1,16 @@
-LAB Route53:
-	1.	Create web application – WordPress website – Hello World
-	2.	Make sure SG is configured for web access
-	3.	Create a Load balancer
-	4.	Create a Target Group
+LAB - Route53
+
+
+https://porkbun.com/ - example.design - change example to your choice.
+
+	1.	Create a web application – Using WordPress free tier AMI or manually configure Linux AMI 
+		a. - Assign an EIP(Static Public IP- Internet Protocol) to your Web application
+	2.	Make sure SG is configured for web access 
+	3.	Create an ALB - MyALB
+	4.	Create a Target Group - TG1
 	5.	Create a hosted zone in Route53
-	6.	Configure out domain to host our web application
-		a.	Public IP Address of our web server.
+	6.	Configure EIP or EC2 Instance in Hosted Zone 
+	7. 	Configure ALB DNS in Hosted Zone
+		a.	Use EIP Address of our web server.
 		b.	DNS of our Load balancer.
+	8. 	Create Health Check for confiugured hosted Zone
