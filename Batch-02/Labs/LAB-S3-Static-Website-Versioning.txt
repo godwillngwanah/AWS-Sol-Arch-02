@@ -7,9 +7,9 @@ LAB (Host Static Website in S3 bucket):
 		b.	Upload index.html file into S3 bucket
 		c.	Edit bucket permission to allow public access
 		d.	Configured bucket to host static website in properties
-		e.	(Ignore) Bucket policy will be needed in real world scenario 
+		e.				(Ignore) Bucket policy will be needed in real world scenario 
 		f.	Make index.html file public
-		g.  	Enable versioning in same bucket 
+		g.  Enable versioning in same bucket 
 		h. 	Make change to index.html and upload updated version
 			Delete 
 	    	i.  	Validate changes and all versions

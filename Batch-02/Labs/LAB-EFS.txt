@@ -1,0 +1,39 @@
+LAB (EFS)
+ 
+	Create EFS and mount same EFS file on 2 private instances.
+	
+	
+	Create a VPC with NID (CIDR)  192.168.0.0/16  EFSVPC
+	
+	1.	1 Public Subnet in AZ1a NID  192.168.0.0/26  Bastion Host (Jumpbox)  Public EFS Subnet
+	2.	1 Private Subnet in AZ1b NID  192.168.1.0/26 in private network  Private EFS Subnet1
+	3.	1 Private subnet in AZ1c NID  192.168.2.0/26 in private network  Private EFS Subnet2
+	
+	By default VPC will 
+		A.	RT1  Public  Public-EFS-RT
+		B.	SG 
+		C.	Network ACL (Do not need)
+		
+	Things we will create
+		A.	Subnet (Total 3 subnets)
+		B.	Private RT  Private-EFS-RT
+		C.	IGW  EFS-IGW
+		D.	NAT  EFS-NAT-GWY
+		
+	- Lunch 1 Linux instance in public subnet
+	- Lunch 2 Linux instances in the 2 private subnets
+	- ssh into bastion host and create keypair
+	- Login to Private server 1 through bastion host 
+	
+	Perform below task to mount EFS 
+	
+	a. sudo su -
+	b. mkdir /mnt/efs
+	c. cd /mnt/
+	d. copy mount command from aws efs service, paste command then Enter
+	e. mount | grep efs 
+	f. cd efs
+	g. vim file1
+	h. Press i, Enter any text and :wq! to save file and exit
+	i. Repeat same steps for Private server2
+	
