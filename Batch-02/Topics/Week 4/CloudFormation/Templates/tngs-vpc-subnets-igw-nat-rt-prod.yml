@@ -1,7 +1,7 @@
 Description: A stack to create vpc, subnets, IGW, nat and route tables
 Parameters:
   EnvironmentName:
-    Description: tng-tngs-prod
+    Description: tng-tngs-Development
     Type: String
   VpcCIDR:
     Description: vpc network IP
@@ -36,7 +36,7 @@ Resources:
       EnableDnsHostnames: true
       Tags:
         - Key: Name
-          Value: tng-Production-VPC
+          Value: tng-Development-VPC
   InternetGateway:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
@@ -113,7 +113,7 @@ Resources:
       SubnetId: !Ref PublicSubnet1
       Tags:
         - Key: Name
-          Value: 1a_NAT_tngs-prod   
+          Value: 1a_NAT_tngs-Dev   
   NatGateway2:
     Type: 'AWS::EC2::NatGateway'
     Properties:
@@ -121,14 +121,14 @@ Resources:
       SubnetId: !Ref PublicSubnet2
       Tags:
         - Key: Name
-          Value: 1b_NAT_tngs-prod
+          Value: 1b_NAT_tngs-Dev
   PublicRouteTable:
     Type: 'AWS::EC2::RouteTable'
     Properties:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: tng_tngs_prod_PublicRouteTable
+          Value: tng_tngs_Dev_PublicRouteTable
   DefaultPublicRoute:
     Type: 'AWS::EC2::Route'
     DependsOn: InternetGatewayAttachment
@@ -152,7 +152,7 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: tng_tngs_prod_PrivateRouteTable_us-east-1a
+          Value: tng_tngs_Dev_PrivateRouteTable_us-east-1a
   DefaultPrivateRoute1:
     Type: 'AWS::EC2::Route'
     Properties:
@@ -170,7 +170,7 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: tng_tngs_prod_PrivateRouteTable2_us-east-1b
+          Value: tng_tngs_Dev_PrivateRouteTable2_us-east-1b
   DefaultPrivateRoute2:
     Type: 'AWS::EC2::Route'
     Properties:
@@ -190,16 +190,16 @@ Resources:
       VpcId: !Ref VPC
 Outputs:
   VPC:
-    Description: tng-Production-VPC
+    Description: tng-Development-VPC
     Value: !Ref VPC
   PublicSubnets:
-    Description: Public subnets for tng-tngs-prod
+    Description: Public subnets for tng-tngs-Dev
     Value: !Join 
       - ','
       - - !Ref PublicSubnet1
         - !Ref PublicSubnet2
   PrivateSubnets:
-    Description: private subnets for tng-tngs-prod
+    Description: private subnets for tng-tngs-Dev
     Value: !Join 
       - ','
       - - !Ref PrivateSubnet1
