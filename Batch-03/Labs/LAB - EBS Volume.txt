@@ -1,0 +1,8 @@
+LAB - EBS (Elastic Block Storage) Volume
+
+	1. Create a new EC2 instance in us-east-1a AZ - Note Block deveice name in description of EC2 instance
+	2. Stop EC2 instance
+	3. Detash default EBS volume from EC2 instance
+	4. Create a new EBS volume in us-east-1a AZ with 100GB of storage space
+	5. Attach newly created EBS to stopped EC2 instance
+	6. Start instance and login.
