@@ -1,0 +1,9 @@
+LAB - EC2	(Elastic Compute Cloud)
+	
+	1.	Create a windows instance in the EC2 console and log in;
+		a.	For linux Configure security group to allow SSH protocol
+		b.	For windows allow RDP protocol
+		c.	Install httpd on linux server 
+		d.  Configure Security group to allow http protocol 
+		6.  Access web server on internet browser using DNS name or ip address
+		

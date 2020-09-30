@@ -1,0 +1,9 @@
+aws cloudwatch Monitoring
+
+
+aws config wizard on linux
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-config-wizard
+
+
+cloudwatch config file location on linux
+/opt/aws/amazon-cloudwatch-agent/bin/config.json.

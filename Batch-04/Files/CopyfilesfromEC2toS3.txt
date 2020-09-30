@@ -1,0 +1,16 @@
+Copy Files from s3 to EC2 instance
+
+Example
+wget https://sharedbucketinaccounta.s3.amazonaws.com/MyKeyPair.pem
+
+AWS Command
+wget https://my_bucket.s3.amazonaws.com/path-to-file
+
+
+Copy from EC2 to S3 bucket
+
+Example
+aws s3 cp MyKeyPair.pem s3://sharedbucketinaccounta/files/MyKeyPair.pem
+
+AWS Command
+aws s3 cp my_copied_file.ext s3://my_bucket/my_folder/my_file.ext

@@ -1,0 +1,22 @@
+LAB - Snapshots
+
+	1. Create a new EC2 Windows Instance in us-east-1
+	2. Create a new snapshot from newly created instance
+	3. From EBS of newly created instance, create a new snapshot
+	3. Create a new EBS volume From newly created Snapshot
+	4. Create a new AMI from same snapshot
+	5. Copy snapshot from us-east-1 to us-east-2 region
+
+Interview Questions:
+
+1. How do you migrate snapshot from virginia (us-east-1) to Ohio (us-east-2)
+Answer:
+
+
+2. How would you encrypt an unencrypted EBS volume
+Answer:
+
+
+
+3. How would decrypt an encrypted EBS volume
+Answer:

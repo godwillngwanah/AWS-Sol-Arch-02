@@ -1,0 +1,11 @@
+RTO vs RPO
+
+RTO 
+The RTO, or recovery time objective, is the maximum length of time 
+after an outage that your company is willing to wait for the recovery 
+process to finish. 
+
+RPO
+On the other hand, the RPO, or recovery point 
+objective, is the maximum amount of data loss your company is 
+willing to accept as measured in time.

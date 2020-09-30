@@ -1,0 +1,4 @@
+LAB - Bootstrapping 
+
+	1.	Create a bootstrapped EC2 instance using MyBootstrapScript.txt
+		a. Test boostrap configuration by accessing web server on the public web
