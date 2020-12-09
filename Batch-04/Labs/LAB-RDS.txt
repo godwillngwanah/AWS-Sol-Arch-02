@@ -1,19 +1,15 @@
 LAB - RDS (Relational Database management Service)
-
-
 Requirements for Creating Database in the RDS
 	1. Network and Security
 		a. VPC
-		b. Private subnets
-		c. NAT Gateway
-		d. Security 3 Groups
-	2. Create 2 Subnet Groups in the RDS (Public-facing and Private facing)
-	3. Create a private database (MySQL Database)
-	4. Create a public database (MySQL Database)
-	5. Create a Bastion host/Jump Server/Management Server inside same database
-	5. Connect to private database throught an EC2 instance inside the same vpc as our database
-	6. Connect to private database throught an EC2 instance inside the same
-
+		b. 2 public subnets
+		c. IGW
+		d. Security Group
+	2. Create a Subnet Group (Associate 2 public subnets) 
+	3. Create a public database (MySQL Database) - make it public
+	5. Connect to public database using our local computer
+Download and Install:
+https://www.jetbrains.com/datagrip/download/#section=windows
 Task: Create a MySQL DB and connect using datagrid
 
 	1. Navigate to Amazon RDS web service 

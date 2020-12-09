@@ -2,16 +2,16 @@ LAB - Deploy and configure Webserver
 	
 Login to aws management console 
 
-	- Create a Linux EC2 instance, login and perform below tasks to configure as a webserver;
+- Create a Linux EC2 instance, login and perform below tasks to configure as a webserver;
 
 	
 		1.	$ sudo su -
 		2.	$ sudo yum install httpd -y
-		3.  $ cd /var/www/html 
-		4.  $ vim index.html
-		5.   Press 'i' and write the text "This is my first website"
-		6.   To save press Esc then :wq!
-		7.  $ service httpd status
+		3.      $ cd /var/www/html 
+		4.      $ vim index.html
+		5.       Press 'i' and write the text "This is my first website"
+		6.       To save press Esc then :wq!
+		7.      $ service httpd status
 		8.	$ service httpd start
 		9.	$ service httpd status
 
