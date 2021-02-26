@@ -1,0 +1,27 @@
+LAB - Deploy and configure Webserver 
+	
+Login to aws management console 
+
+- Create a Linux EC2 instance, login and perform below tasks to configure as a webserver;
+
+	
+		1.	$ sudo su -
+		2.	$ sudo yum install httpd -y
+		3.      $ cd /var/www/html 
+		4.      $ vim index.html
+		5.       Press 'i' and write the text "This is my first website"
+		6.       To save press Esc then :wq!
+		7.      $ service httpd status
+		8.	$ service httpd start
+		9.	$ service httpd status
+
+
+Common Linux Syntax to familiarize
+
+1. ls  (List)- to list items in current folder
+2. pwd (Present Working Directory) - Find current location
+3. cd  (Change directory) - To navigate to another directory
+4. Vim - Linux editing software to create and save files
+5. sudo su - Change to root user
+6. execute as root user
+7. cd ../ - Go to previous directory	

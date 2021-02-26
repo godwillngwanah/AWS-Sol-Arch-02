@@ -1,0 +1,6 @@
+#!/bin/bash
+su sudo -
+yum install httpd -y
+service httpd start
+echo "My first Bootstrapped Static Website" > /var/www/html/index.html
+chkconfig httpd on
