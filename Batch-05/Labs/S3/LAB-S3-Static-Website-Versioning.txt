@@ -11,5 +11,5 @@ LAB (Host Static Website in S3 bucket):
 		f.	Make index.html file public
 		g.  Enable versioning in same bucket 
 		h. 	Make change to index.html and upload updated version
-	    i. Validate changes and all versions
-		j. Delete bucket
+	    i.  Validate changes and all versions
+		j.  Delete bucket
