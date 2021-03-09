@@ -4,7 +4,6 @@
         {
             "Effect": "Allow",
             "Action": [
-                "ec2:DescribeAccountAttributes",
                 "ec2:DescribeAddresses",
                 "ec2:DescribeClassicLinkInstances",
                 "ec2:DescribeCustomerGateways",
