@@ -1,0 +1,96 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Cloudformation to build ec2 instances
+Parameters:
+  VpcName:
+    Type: String
+    Description: VPC Name
+    Default: Default
+  ImageId:
+    Type: String
+    Description: AMI ID to use
+    Default: ami-0915bcb5fa77e4892 # Linux/Unix AMI
+  Subnet:
+    Type: String
+    Description: Default subnet to use
+    Default: subnet-73f50f2c
+  InstanceType:
+    Type: String
+    Description: ec2 instance type
+    Default: t2.micro
+  SecurityGroups:
+    Type: String
+    Description: SG
+    Default: sg-042505b2bcc00d42f
+  AutoScalingGroup:
+    Type: String
+    Description: ASGroup
+    Default: MyASG
+
+Resources:
+  LinuxServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      KeyName: us-east-1keypair
+      InstanceType: !Ref InstanceType
+      SecurityGroupIds: 
+        - !Ref SecurityGroups
+      SubnetId: !Ref Subnet
+      BlockDeviceMappings:  
+        -
+          DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp3
+            DeleteOnTermination: true
+            VolumeSize: 8
+      Volumes:
+        - Device: /dev/xvdf
+          VolumeId: !Ref AddVolume
+
+      Tags:
+        - Key: Name
+          Value: Linux Server
+
+  AutoScalingGroup: !Ref AutoScalingGroup
+  #   Type: AWS::AutoScaling::AutoScalingGroup
+  #   Properties:
+  #     AvailabilityZones:
+  #       Fn::GetAZs: ''
+  #     LaunchConfigurationName: !Ref LaunchConfig
+  #     DesiredCapacity: '3'
+  #     MinSize: '1'
+  #     MaxSize: '3'
+  # # CreationPolicy:
+  #   ResourceSignal:
+  #     Count: '3'
+  #     Timeout: PT15M
+  # UpdatePolicy:
+  #   AutoScalingScheduledAction:
+  #     IgnoreUnmodifiedGroupSizeProperties: 'true'
+  #   AutoScalingRollingUpdate:
+  #     MinInstancesInService: '1'
+  #     MaxBatchSize: '2'
+  #     PauseTime: PT1M
+  #     WaitOnResourceSignals: 'true'
+  LaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: !Ref ImageId
+      InstanceType: !Ref InstanceType
+
+  
+  MyEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref LinuxServer
+
+  AddVolume:
+    Type: AWS::EC2::Volume
+    Description: Additional EBS Volume
+    Properties:
+      AvailabilityZone: us-east-1b
+      VolumeType: gp2
+      Size: 5
+      Encrypted: true
+
+

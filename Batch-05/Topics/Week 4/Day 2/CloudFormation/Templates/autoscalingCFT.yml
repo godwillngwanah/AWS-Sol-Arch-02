@@ -6,7 +6,7 @@ AutoScalingGroup:
     LaunchConfigurationName:
       Ref: LaunchConfig
     DesiredCapacity: '3'
-    MinSize: '1'
+    MinSize: '1'cm
     MaxSize: '4'
   CreationPolicy:
     ResourceSignal:

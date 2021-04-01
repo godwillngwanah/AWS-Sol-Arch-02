@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  VpcName:
+    Type: String
+    Description: Input VPC Name
+    Default: 'MyVPC'
+  Subnet:
+    Type: String
+    Description: subnet
+    Default: 'subnet-73f50f2c'
+  SecurityGroups:
+    Type: String
+    Description: SG
+    Default: 'sg-042505b2bcc00d42f'
+  InstanceType:
+    Type: String
+    Description: Instance TYpe
+    Default: 't2.micro'
+  KeyPair:
+    Type: String
+    Description: Key pair
+    Default: 'us-east-1keypair'
+  AMI:
+    Type: String
+    Description: AMI
+    Default: 'ami-0915bcb5fa77e4892'
+  # IAMRole:
+  #   Type: String
+  #   Description: IAM Role
+  #   Default: ''
+
+Resources:
+  MyInstance:
+    Type: AWS::EC2::Instance
+    DeletionPolicy: Retain    
+    Properties:
+      InstanceType: !Ref InstanceType
+      SubnetId: !Ref Subnet
+      ImageId: !Ref AMI
+      SecurityGroupIds:
+        - !Ref SecurityGroups
+      KeyName: !Ref KeyPair
+      # IAMRoleARN: !Ref IAMRole
+      BlockDeviceMappings:
+        - 
+          DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp3
+            VolumeSize: 8
+            DeleteOnTermination: true
