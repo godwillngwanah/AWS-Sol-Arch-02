@@ -1,11 +1,10 @@
-LAB - EC2	(Elastic Compute Cloud)
+LAB - EC2 (Elastic Compute Cloud)
 
 Sign in into your aws account and perform below tasks:
 
+Create a windows and linix EC2 instance in the Amazon EC2 console and login.
 
-Create a windows and linix EC2 instance in the Amazon EC2 console and login using Mobaxterm;
+Please try to create on your own but if you need guidance, refer to your notes for step-by-step instructions. 
+
+- PDF reference name --> (6. CREATING AN INSTANCE)
    
-    - Use the public IP address to remote login into both servers.
-
-		a.	For Linux Server, use SSH protocol
-		b.	For Windows Server, use RDP protocol	

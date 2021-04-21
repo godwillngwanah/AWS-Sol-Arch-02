@@ -1,0 +1,273 @@
+AWSTemplateFormatVersion : "2010-09-09"
+Description: "Creates EC2 instance for the Distributed Batch Environment"
+
+Parameters:
+  VpcName: 
+    Type: String
+    Description: Name of VPC
+    Default: service-catalog-test
+  InstanceType:
+    Type: String
+    Description: EC2 instance type to use
+    Default: m5.large
+  Subnet:
+    Type: String
+    Description: The private VPC subnet to use. For example - 'PrivateSubnet1A' 
+    Default: PrivateSubnet1A
+
+Resources:
+  GodwillInstanceSGV3:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Godwill Security
+      VpcId:
+        Fn::ImportValue: !Sub "${VpcName}-VpcId"
+      SecurityGroupEgress:
+        - Description: HTTPS to Anywhere
+          CidrIp: 0.0.0.0/0
+          IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+  GodwillEC2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: SFGAppgodwillec2test
+      Description: godwill C2 test
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+        - !Sub "arn:aws:iam::${AWS::AccountId}:policy/SFGBaselineEC2Policy"
+      PermissionsBoundary: !Sub "arn:aws:iam::${AWS::AccountId}:policy/SFGPermissionsBoundary"
+      Policies:
+        - PolicyName: cloudwatch-agent-config
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/sfg/godwill/cwagentconfig"
+  GodwillEC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      InstanceProfileName: SFGGodwillprofiletest
+      Roles:
+        - !Ref GodwillEC2Role
+        - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+        - !Sub "arn:aws:iam::${AWS::AccountId}:policy/SFGBaselineEC2Policy"
+      PermissionsBoundary: !Sub "arn:aws:iam::${AWS::AccountId}:policy/SFGPermissionsBoundary"
+      Policies:
+        - PolicyName: cloudwatch-agent-config
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/sfg/godwill/cwagentconfig"
+  GodwillEC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      InstanceProfileName: SFGGodwillprofiletest
+      Roles:
+        - !Ref Godw
+- Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+        - !Sub "arn:aws:iam::${AWS::AccountId}:policy/SFGBaselineEC2Policy"
+      PermissionsBoundary: !Sub "arn:aws:iam::${AWS::AccountId}:policy/SFGPermissionsBoundary"
+      Policies:
+        - PolicyName: cloudwatch-agent-config
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/sfg/godwill/cwagentconfig"
+  GodwillEC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      InstanceProfileName: SFGGodwillprofiletest
+      Roles:
+        - !Ref Godw
+- Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+        - !Sub "arn:aws:iam::${AWS::AccountId}:policy/SFGBaselineEC2Policy"
+      PermissionsBoundary: !Sub "arn:aws:iam::${AWS::AccountId}:policy/SFGPermissionsBoundary"
+      Policies:
+        - PolicyName: cloudwatch-agent-config
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/sfg/godwill/cwagentconfig"
+  GodwillEC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      InstanceProfileName: SFGGodwillprofiletest
+      Roles:
+        - !Ref Godw
+- Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+        - !Sub "arn:aws:iam::${AWS::AccountId}:policy/SFGBaselineEC2Policy"
+      PermissionsBoundary: !Sub "arn:aws:iam::${AWS::AccountId}:policy/SFGPermissionsBoundary"
+      Policies:
+        - PolicyName: cloudwatch-agent-config
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/sfg/godwill/cwagentconfig"
+  GodwillEC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      InstanceProfileName: SFGGodwillprofiletest
+      Roles:
+        - !Ref Godw
+  GodwillCWAgentConfig:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Description: godwill CW agent config
+      Name: /sfg/godwill/cwagentconfig
+      Type: String
+      Value: !Sub |
+            {
+              "agent": {
+                "metrics_collection_interval": 60,
+                "logfile": "/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log",
+                "debug": false,
+                "run_as_user": "cwagent"
+              },
+              "metrics": {
+                "namespace": "GodwillCluster",
+                "append_dimensions": {
+                  "InstanceId": "${!aws:InstanceId}",
+                  "InstanceType": "${!aws:InstanceType}"
+                },
+                "aggregation_dimensions": [
+                  [ "InstanceId" ],
+                  [ "InstanceType" ]
+                ],
+                "metrics_collected": {
+                  "cpu": {
+                    "measurement": [ "usage_idle", "usage_system", "usage_user" ],
+                    "resources": [ "*" ],
+                    "totalcpu": true,
+                    "append_dimensions": {
+                      "InstanceId": "${!aws:InstanceId}",
+                      "InstanceType": "${!aws:InstanceType}"
+                    }
+                  },
+                  "mem": {
+                    "measurement": [ "available", "available_percent", "free", "used", "used_percent" ],
+                    "append_dimensions": {
+                      "InstanceId": "${!aws:InstanceId}",
+                      "InstanceType": "${!aws:InstanceType}"
+                    }
+                  },
+                  "disk": {
+                    "measurement": [ "free", "used", "used_percent" ],
+                    "resources": [ "/", "/opt/tomcat_instances" ],
+                    "drop_device": true,
+                    "append_dimensions": {
+                      "InstanceId": "${!aws:InstanceId}",
+                      "InstanceType": "${!aws:InstanceType}"
+                    }
+                  }
+                }
+              }
+            }  
+  DBEServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      Monitoring: True
+      ImageId: ami-0570ba1032e004577
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: !Ref GodwillEC2InstanceProfile
+      SecurityGroupIds:
+      - Fn::ImportValue: !Sub ${VpcName}-VpcResourceSG
+      - !Ref GodwillInstanceSGV3
+      SubnetId:
+        Fn::ImportValue: !Sub ${VpcName}-${Subnet}
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            DeleteOnTermination: True
+            Encrypted: True
+            VolumeSize: 50
+            VolumeType: gp2
+        - DeviceName: xvdf
+          Ebs:
+            DeleteOnTermination: True
+            Encrypted: True
+            VolumeSize: 6
+            VolumeType: gp2
+      UserData:
+        "Fn::Base64": !Sub |
+          #!/bin/bash -ve
+          TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 60")
+          INSTANCE_ID=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id)
+          AVAILABILITY_ZONE=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/placement/availability-zone)
+          LOCALIP=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/local-ipv4)
+
+          # Install and Configure CloudWatch Agent
+          curl \
+            -o /root/amazon-cloudwatch-agent.rpm \
+            https://s3.${AWS::Region}.amazonaws.com/amazoncloudwatch-agent-${AWS::Region}/redhat/amd64/latest/amazon-cloudwatch-agent.rpm
+          yum install -y /root/amazon-cloudwatch-agent.rpm
+          mkdir -p /etc/systemd/system/amazon-cloudwatch-agent.service.d
+          cat << EOF > /etc/systemd/system/amazon-cloud
+
+

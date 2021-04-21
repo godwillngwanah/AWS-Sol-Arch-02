@@ -1,0 +1,244 @@
+--- 
+AWSTemplateFormatVersion: "2010-09-09"
+Parameters: 
+  RawBucket: 
+    Description: "Name of the Bucket to store the Raw data."
+    Type: String
+    Default: testgluebuckettngs2
+  ScriptBucketName:
+    Description: "Name of the S3 bucket, where glue script will be uploaded"
+    Type: String
+    Default: gluetestbuckettngs
+  testdb: 
+    Description: "Source Database Name."
+    Type: String
+    Default: testdb
+  Table1:
+    Description: "Source Table Name."
+    Type: String
+    Default: table1
+  CrawlerSchedule: 
+    Default: "cron(5 0 * * ? *)"
+    Description: "Crawler Execution Schedule Cron Expression"
+    Type: String
+  # PartitionKeys: 
+  #   Description: "Provide column names for the partitions separated by comma (eg.'column1,column2')."
+  #   Type: String
+
+Resources:  
+  RawBucket1:
+    Type: "AWS::S3::Bucket"  
+    Properties: 
+      BucketName: 
+        Ref: RawBucket
+      BucketEncryption:
+        - 
+
+  Database:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput:
+        Name: !Ref testdb	
+        Description: Test database
+
+  TESTTable:
+    DependsOn: Database
+    Type: AWS::Glue::Table
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseName: !Ref testdb
+      TableInput:
+        Name: !Ref Table1
+        Description: Define the first few columns of the flights table
+        TableType: EXTERNAL_TABLE
+        Parameters: {
+    "classification": "csv"
+  }
+#       ViewExpandedText: String
+        PartitionKeys:
+        # Data is partitioned by month
+        - Name: mon
+          Type: bigint
+        StorageDescriptor:
+          OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+          Columns:
+          - Name: year
+            Type: bigint
+          - Name: quarter
+            Type: bigint
+          - Name: month
+            Type: bigint
+          - Name: day_of_month
+            Type: bigint			
+          InputFormat: org.apache.hadoop.mapred.TextInputFormat
+          Location: s3://crawler-public-us-east-1/flight/2016/csv/
+          SerdeInfo:
+            Parameters:
+              field.delim: ","
+            SerializationLibrary: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+
+# Partition 1
+  TESTPartitionMon1:
+    DependsOn: TESTTable
+    Type: AWS::Glue::Partition
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseName: !Ref testdb
+      TableName: !Ref Table1
+      PartitionInput:
+        Values:
+        - 1
+        StorageDescriptor:
+          OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+          Columns:
+          - Name: mon
+            Type: bigint
+          InputFormat: org.apache.hadoop.mapred.TextInputFormat
+          Location: s3://crawler-public-us-east-1/flight/2016/csv/mon=1/
+          SerdeInfo:
+            Parameters:
+              field.delim: ","
+            SerializationLibrary: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+
+# Partition 2
+  TESTPartitionMon2:
+    DependsOn: TESTTable
+    Type: AWS::Glue::Partition
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseName: !Ref testdb
+      TableName: !Ref Table1
+      PartitionInput:
+        Values:
+        - 2
+        StorageDescriptor:
+          OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+          Columns:
+          - Name: mon
+            Type: bigint
+          InputFormat: org.apache.hadoop.mapred.TextInputFormat
+          Location: s3://crawler-public-us-east-1/flight/2016/csv/mon=2/
+          SerdeInfo:
+            Parameters:
+              field.delim: ","
+            SerializationLibrary: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+
+# Partition 3
+  TESTPartitionMon3:
+    DependsOn: TESTTable
+    Type: AWS::Glue::Partition
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseName: !Ref testdb
+      TableName: !Ref Table1
+      PartitionInput:
+        Values:
+        - 3
+        StorageDescriptor:
+          OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+          Columns:
+          - Name: mon
+            Type: bigint
+          InputFormat: org.apache.hadoop.mapred.TextInputFormat
+          Location: s3://crawler-public-us-east-1/flight/2016/csv/mon=3/
+          SerdeInfo:
+            Parameters:
+              field.delim: ","
+            SerializationLibrary: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+
+# Partition 4
+  TESTPartitionMon4:
+    DependsOn: TESTTable
+    Type: AWS::Glue::Partition
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseName: !Ref testdb
+      TableName: !Ref Table1
+      PartitionInput:
+        Values:
+        - 4
+        StorageDescriptor:
+          OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+          Columns:
+          - Name: mon
+            Type: bigint
+          InputFormat: org.apache.hadoop.mapred.TextInputFormat
+          Location: s3://crawler-public-us-east-1/flight/2016/csv/mon=4/
+          SerdeInfo:
+            Parameters:
+              field.delim: ","
+            SerializationLibrary: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+
+  ExecutionRole:
+    Type: "AWS::IAM::Role"  
+    Properties:
+      RoleName: Glue_Execution_Role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - glue.amazonaws.com
+                - s3.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+        - arn:aws:iam::aws:policy/CloudWatchFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+      Path: "/" 
+
+  GlueCrawler:  
+    Type: AWS::Glue::Crawler
+    Properties:
+      Role: !Sub 'arn:aws:iam::${AWS::AccountId}:role/Glue_Execution_Role'
+      Schedule:
+        ScheduleExpression:
+          Ref: CrawlerSchedule
+      DatabaseName:
+        Ref: testdb
+      Targets:
+        S3Targets:
+          -
+            Path:
+              Fn::Join :
+                - "/"
+                -
+                  - Ref : RawBucket
+                  - Ref : testdb
+                  - Ref : Table1
+    DependsOn: ExecutionRole
+
+  GlueJobController: 
+    Type: AWS::Glue::Job
+    Properties:
+      Name: Glue_Controller
+      Role:
+        Fn::GetAtt: [ExecutionRole, Arn]
+      MaxCapacity: 2
+      ExecutionProperty:
+        MaxConcurrentRuns: 2
+      Command:
+        Name: glueetl
+        PythonVersion: 3
+        ScriptLocation: !Sub "s3://${ScriptBucketName}/glue-script.py"
+      DefaultArguments:
+        "--job-bookmark-option" : "job-bookmark-disable"
+        "--temp_bucket": !Ref "RawBucket"
+
+  Trigger:
+    Type: AWS::Glue::Trigger
+    Properties:
+      Type: ON_DEMAND
+      Name: !Sub
+        - "Glue-Trigger-${testdb}"
+        - {testdb: !Ref testdb}
+      Actions:
+        - JobName: Glue_Controller
+          Arguments:
+            '--bucket_name': !Ref RawBucket
+            '--database_name': !Ref testdb
+            '--table_name' : !Ref Table1
+            

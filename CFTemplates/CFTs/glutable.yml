@@ -1,0 +1,155 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+# Sample CloudFormation template in YAML to demonstrate creating a database, a table, and partitions
+# The metadata created in the Data Catalog points to the flights public S3 bucket
+#
+# Parameters substituted in the Resources section
+# These parameters are names of the resources created in the Data Catalog
+Parameters:
+  TestDB:
+    Type: String
+    Default: test-database-flights-1
+  Table1:
+    Type: String
+    Default: test-manual-table-flights-1
+# Resources to create metadata in the Data Catalog
+Resources:
+###
+# Create an AWS Glue database
+  TESTDatabaseFlights:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput:
+        Name: !Ref TestDB	
+        Description: Database to hold tables for flights data
+###
+# Create an AWS Glue table
+  TESTTableFlights:
+    # Creating the table waits for the database to be created
+    DependsOn: TESTDatabaseFlights
+    Type: AWS::Glue::Table
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseName: !Ref TestDB
+      TableInput:
+        Name: !Ref Table1
+        Description: Define the first few columns of the flights table
+        TableType: EXTERNAL_TABLE
+        Parameters: {
+    "classification": "csv"
+  }
+#       ViewExpandedText: String
+        PartitionKeys:
+        # Data is partitioned by month
+        - Name: mon
+          Type: bigint
+        StorageDescriptor:
+          OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+          Columns:
+          - Name: year
+            Type: bigint
+          - Name: quarter
+            Type: bigint
+          - Name: month
+            Type: bigint
+          - Name: day_of_month
+            Type: bigint			
+          InputFormat: org.apache.hadoop.mapred.TextInputFormat
+          Location: s3://crawler-public-us-east-1/flight/2016/csv/
+          SerdeInfo:
+            Parameters:
+              field.delim: ","
+            SerializationLibrary: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+# Partition 1
+# Create an AWS Glue partition  
+  TESTPartitionMon1:
+    DependsOn: TESTTableFlights
+    Type: AWS::Glue::Partition
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseName: !Ref TestDB
+      TableName: !Ref Table1
+      PartitionInput:
+        Values:
+        - 1
+        StorageDescriptor:
+          OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+          Columns:
+          - Name: mon
+            Type: bigint
+          InputFormat: org.apache.hadoop.mapred.TextInputFormat
+          Location: s3://crawler-public-us-east-1/flight/2016/csv/mon=1/
+          SerdeInfo:
+            Parameters:
+              field.delim: ","
+            SerializationLibrary: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+# Partition 2
+# Create an AWS Glue partition 
+  TESTPartitionMon2:
+    DependsOn: TESTTableFlights
+    Type: AWS::Glue::Partition
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseName: !Ref TestDB
+      TableName: !Ref Table1
+      PartitionInput:
+        Values:
+        - 2
+        StorageDescriptor:
+          OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+          Columns:
+          - Name: mon
+            Type: bigint
+          InputFormat: org.apache.hadoop.mapred.TextInputFormat
+          Location: s3://crawler-public-us-east-1/flight/2016/csv/mon=2/
+          SerdeInfo:
+            Parameters:
+              field.delim: ","
+            SerializationLibrary: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+# Partition 3
+# Create an AWS Glue partition 
+  TESTPartitionMon3:
+    DependsOn: TESTTableFlights
+    Type: AWS::Glue::Partition
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseName: !Ref TestDB
+      TableName: !Ref Table1
+      PartitionInput:
+        Values:
+        - 3
+        StorageDescriptor:
+          OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+          Columns:
+          - Name: mon
+            Type: bigint
+          InputFormat: org.apache.hadoop.mapred.TextInputFormat
+          Location: s3://crawler-public-us-east-1/flight/2016/csv/mon=3/
+          SerdeInfo:
+            Parameters:
+              field.delim: ","
+            SerializationLibrary: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+# Partition 4
+# Create an AWS Glue partition 
+  TESTPartitionMon4:
+    DependsOn: TESTTableFlights
+    Type: AWS::Glue::Partition
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseName: !Ref TestDB
+      TableName: !Ref Table1
+      PartitionInput:
+        Values:
+        - 4
+        StorageDescriptor:
+          OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+          Columns:
+          - Name: mon
+            Type: bigint
+          InputFormat: org.apache.hadoop.mapred.TextInputFormat
+          Location: s3://crawler-public-us-east-1/flight/2016/csv/mon=4/
+          SerdeInfo:
+            Parameters:
+              field.delim: ","
+            SerializationLibrary: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
