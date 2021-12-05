@@ -1,0 +1,6 @@
+LAB - bootsrtapping
+
+Bootstrapping allows us to write and put a startup script while launching an EC2 Instance so that it execute automatically as soon as the instance launch
+
+	1.	Create a bootstrapped instance using MyBootstrapScript.txt
+		a.	Test by accessing on the public web

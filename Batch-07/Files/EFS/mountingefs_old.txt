@@ -1,0 +1,13 @@
+EFS Mount Instructions
+https://docs.aws.amazon.com/efs/latest/ug/mounting-fs.html
+
+Using mount helper
+
+Install mount helper
+sudo yum install -y amazon-efs-utils
+
+Create mount directory
+$ mkdir /mnt/efs
+
+mount efs
+$ sudo mount -t efs fs-12345678:/ /mnt/efs
