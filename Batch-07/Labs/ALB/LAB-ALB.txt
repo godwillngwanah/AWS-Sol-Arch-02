@@ -1,9 +1,0 @@
-Lab - ALB (Application Load Balancer)
-
-
-	1. Create an EC2 Wrdpress Web Server
-	2. Test web server using IP and public DNS
-	3. Create an Application Load Balancer - MyALB
-	4. Create a Target groups TG1
-	5. Register EC2 instance to TG1  
-	6. Test ALB using DNS Name
