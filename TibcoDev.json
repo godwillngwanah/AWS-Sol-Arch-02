@@ -1,0 +1,356 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "1",
+            "Effect": "Allow",
+            "Action": [
+                "cloudwatch:GetMetricData",
+                "cloudwatch:GetMetricStatistics",
+                "cloudwatch:ListMetrics"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion":
+                        "us-east-2"
+                }
+            }
+        },
+        {
+            "Sid": "2",
+            "Effect": "Allow",
+            "Action": "autoscaling-plans:*",
+            "Resource": "*"
+        },
+        {
+            "Sid": "3",
+            "Effect": "Allow",
+            "Action": "cloudformation:*",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "us-east-2"
+                }
+            }
+        },
+        {
+            "Sid": "ec2",
+            "Effect": "Allow",
+            "Action": "ec2:*",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "us-east-2"
+                }
+            }
+        },
+        {
+            "Sid": "5",
+            "Effect": "Allow",
+            "Action": "ecr:*",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "us-east-2"
+                }
+            }
+        },
+        {
+            "Sid": "6",
+            "Effect": "Allow",
+            "Action": "ecs:*",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "us-east-2"
+                }
+            }
+        },
+        {
+            "Sid": "7",
+            "Effect": "Allow",
+            "Action": "eks:*",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "us-east-2"
+                }
+            }
+        },
+        {
+            "Sid": "8",
+            "Effect": "Allow",
+            "Action": "elasticloadbalancing:*",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "us-east-2"
+                }
+            }
+        },
+        {
+            "Sid": "9",
+            "Effect": "Allow",
+            "Action": "elasticloadbalancing:*",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "us-east-2"
+                }
+            }
+        },
+        {
+            "Sid": "a",
+            "Effect": "Allow",
+            "Action": "iam:CreateServiceLinkedRole",
+            "Resource": "*",
+            "Condition": {
+                "StringLike": {
+                    "iam:AWSServiceName": "elasticfilesystem.amazonaws.com"
+                }
+            }
+        },
+        {
+            "Sid": "b",
+            "Effect": "Allow",
+            "Action": [
+                "logs:DeleteSubscriptionFilter",
+                "logs:DescribeLogGroups",
+                "logs:DeleteLogGroup",
+                "logs:DescribeLogStreams",
+                "logs:DescribeSubscriptionFilters",
+                "logs:DescribeMetricFilters",
+                "logs:DeleteLogStream",
+                "ec2:CreateNetworkInterface",
+                "logs:CreateExportTask",
+                "logs:PutMetricFilter",
+                "iam:PassRole",
+                "logs:CreateLogStream",
+                "logs:DeleteMetricFilter",
+                "logs:DeleteRetentionPolicy",
+                "logs:GetLogEvents",
+                "logs:FilterLogEvents",
+                "logs:PutSubscriptionFilter",
+                "logs:PutRetentionPolicy"
+            ],
+            "Resource": [
+                "arn:aws:elasticfilesystem:us-east-2:998808488458:file-system/*",
+                "arn:aws:iam::998808488458:role/TibcoContainerEKS",
+                "arn:aws:iam::998808488458:role/eks-node-group-instance-role-NodeInstanceRole-Q6RMCCBQ700",
+                "arn:aws:logs:us-east-2:*:*"
+            ]
+        },
+        {
+            "Sid": "d",
+            "Effect": "Allow",
+            "Action": [
+                "kinesis:DescribeStreamSummary",
+                "kinesis:DescribeStreamConsumer",
+                "kinesis:DescribeStream"
+            ],
+            "Resource": "arn:aws:kinesis:us-east-2:*:*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "us-east-2"
+                }
+            }
+        },
+        {
+            "Sid": "e",
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetRole",
+                "iam:GetPolicyVersion",
+                "iam:CreateServiceLinkedRole",
+                "iam:GetPolicy",
+                "iam:ListAttachedRolePolicies",
+                "iam:CreateRole",
+                "kms:DescribeKey",
+                "iam:AttachRolePolicy",
+                "iam:GetRolePolicy",
+                "logs:CreateLogGroup"
+            ],
+            "Resource": [
+                "arn:aws:iam::998808488458:*",
+                "arn:aws:elasticfilesystem:us-east-2:998808488458:file-system/*",
+                "arn:aws:logs:us-east-2:*:*"
+            ]
+        },
+        {
+            "Sid": "f",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:CreateFunction",
+                "lambda:TagResource",
+                "lambda:ListVersionsByFunction",
+                "lambda:GetLayerVersion",
+                "lambda:GetEventSourceMapping",
+                "lambda:GetFunction",
+                "lambda:ListAliases",
+                "lambda:GetFunctionConfiguration",
+                "lambda:GetLayerVersionPolicy",
+                "lambda:UntagResource",
+                "lambda:AddPermission",
+                "lambda:ListTags",
+                "lambda:GetAlias",
+                "lambda:RemovePermission",
+                "lambda:GetPolicy"
+            ],
+            "Resource": "arn:aws:lambda:us-east-2:998808488458:*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "us-east-2"
+                }
+            }
+        },
+        {
+            "Sid": "g",
+            "Effect": "Allow",
+            "Action": [
+                "route53:CreateHostedZone",
+                "route53:GetHostedZone",
+                "route53:GetHealthCheck",
+                "route53:DeleteHostedZone",
+                "route53:ListHostedZonesByName"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "us-east-2"
+                }
+            }
+        },
+        {
+            "Sid": "h",
+            "Effect": "Allow",
+            "Action": [
+                "servicediscovery:ListServices",
+                "servicediscovery:GetOperation",
+                "servicediscovery:DeleteService",
+                "servicediscovery:DeleteNamespace",
+                "servicediscovery:ListNamespaces",
+                "servicediscovery:GetNamespace",
+                "servicediscovery:CreatePrivateDnsNamespace",
+                "servicediscovery:RegisterInstance",
+                "servicediscovery:GetService",
+                "servicediscovery:CreateService",
+                "servicediscovery:UpdateService"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "us-east-2"
+                }
+            }
+        },
+        {
+            "Sid": "i",
+            "Effect": "Allow",
+            "Action": [
+                "logs:DescribeExportTasks",
+                "logs:Describe*",
+                "logs:CancelExportTask",
+                "logs:TestMetricFilter",
+                "logs:Get*"
+            ],
+            "Resource": "arn:aws:logs:us-east-2:*:*"
+        },
+        {
+            "Sid": "j",
+            "Effect": "Allow",
+            "Action": "es:*",
+            "Resource": "arn:aws:es:us-east-2:998808488458:*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "us-east-2"
+                }
+            }
+        },
+        {
+            "Sid": "k",
+            "Effect": "Allow",
+            "Action": "iam:ListRoles",
+            "Resource": "arn:aws:iam::998808488458:*"
+        },
+        {
+            "Sid": "l",
+            "Effect": "Allow",
+            "Action": "kinesis:ListStreams",
+            "Resource": "arn:aws:kinesis:us-east-2:*:*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "us-east-2"
+                }
+            }
+        },
+        {
+            "Sid": "m",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:ListFunctions",
+                "lambda:ListEventSourceMappings",
+                "lambda:ListLayerVersions",
+                "lambda:ListLayers",
+                "lambda:GetAccountSettings"
+            ],
+            "Resource": "arn:aws:lambda:us-east-2:998808488458:*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "us-east-2"
+                }
+            }
+        },
+        {
+            "Sid": "n",
+            "Effect": "Allow",
+            "Action": "kms:ListAliases",
+            "Resource": "arn:aws:elasticfilesystem:us-east-2:998808488458:file-system/*"
+        },
+        {
+            "Sid": "o",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeAvailabilityZones",
+                "ec2:DescribeNetworkInterfaceAttribute",
+                "ec2:DescribeVpcs",
+                "ec2:ModifyNetworkInterfaceAttribute",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeVpcAttribute",
+                "ec2:DescribeSecurityGroups"
+            ],
+            "Resource": "arn:aws:elasticfilesystem:us-east-2:998808488458:file-system/*"
+        },
+        {
+            "Sid": "p",
+            "Effect": "Allow",
+            "Action": "elasticfilesystem:*",
+            "Resource": "arn:aws:elasticfilesystem:us-east-2:998808488458:file-system/*"
+        },
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "lambda:*",
+            "Resource": "*"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": "es:*",
+            "Resource": [
+                "arn:aws:es:us-east-2:998808488458:domain/es-tibcocontainer",
+                "arn:aws:es:us-east-1:998808488458:domain/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": [
+                        "us-east-2",
+                        "us-east-1"
+                    ]
+                }
+            }
+        }        
+    ]
+}

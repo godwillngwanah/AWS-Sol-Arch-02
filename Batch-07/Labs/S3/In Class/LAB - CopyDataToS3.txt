@@ -3,7 +3,7 @@ Moving files in and out of AWS S3 storage
  - Navigate to aws IAM service
  - Created a new IAM programmatic user and assign Admin policy
  - Use credentials to log into aws cli
-	$ aws configure
+$ aws configure
 
 
 Copy file to s3 and from s3 using aws CLI on your local machines
