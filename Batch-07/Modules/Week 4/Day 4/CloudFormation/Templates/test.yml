@@ -1,0 +1,53 @@
+Description: This is my web server
+Parameters:
+  ami:
+    Type: String
+    Description: Amazon machine image
+    Default: ami-0e1d30f2c40c4c701
+  InstanceType: 
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t3.large
+      - m4.large
+  Securitygroups:
+    Type: String
+    Default: sg-02c58e8f5c5e98ab9
+  KeyName: 
+    Type: "AWS::EC2::KeyPair::KeyName"
+    Default: ""
+  Subnet:
+    Type: AWS::EC2::Subnet::Id 
+    Default: ""
+  TagValue:
+    Type: String
+    Default: Webserver
+Resources:
+  Webserver:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      KeyName: !Ref KeyName
+      SubnetId: !Ref Subnet
+      ImageId: !Ref ami
+      InstanceType: !Ref InstanceType
+      SecurityGroupIds: 
+        - !Ref Securitygroups
+      BlockDeviceMappings:
+        -
+          DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 8
+            VolumeType: gp3
+      Tags:
+        - Key: "Name"
+          Value: !Ref TagValue
+Outputs:
+  WebserverName:
+    Description: server name
+    Value: !Ref TagValue
+  InstanceId: 
+    Value: !Ref Webserver
+    Description: Server ID
+
+
