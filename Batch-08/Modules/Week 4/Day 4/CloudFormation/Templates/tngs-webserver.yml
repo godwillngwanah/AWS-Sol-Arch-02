@@ -1,0 +1,23 @@
+
+AWSTemplateFormatVersion: "2010-09-09"
+Description: tngs WebServer
+Resources:
+  MyEC2Instance: 
+    Type: "AWS::EC2::Instance"
+    Properties: 
+      ImageId: "ami-0e1d30f2c40c4c701" 
+      SubnetId: "subnet-0ff49a69"
+      SecurityGroupIds:
+        - sg-02c58e8f5c5e98ab9
+      InstanceType: t2.micro
+      KeyName: mykeypair
+      BlockDeviceMappings:
+        -
+          DeviceName: /dev/sda1
+          Ebs:
+            VolumeType: gp3
+            DeleteOnTermination: false
+            VolumeSize: 8
+      Tags:
+        Key: "Name"
+          Value: "My-Webserver"

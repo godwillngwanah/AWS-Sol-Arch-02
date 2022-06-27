@@ -1,0 +1,13 @@
+LAB - AMI
+
+	1. Create a new Linux EC2 Instance in us-east-1 region
+	2. Log into the server and create a file, myfile1 and save.
+	3. Create an AMI from same Linux server.
+	4. Migrate AMI to us-east-2 region
+	4. Launch AMI into a new Linux server2.
+	5. Log into the new Linux Server2 and verify myfile1 exist.
+	
+Hance we have leverage existing AMI in same region or another region or another account.
+
+Question?
+1. How would you share same AMI to another aws account?
