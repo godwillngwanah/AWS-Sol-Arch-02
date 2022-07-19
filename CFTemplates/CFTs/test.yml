@@ -1,0 +1,19 @@
+Description: test
+Parameters:
+  InstanceType:
+    Descriopion:
+    Type: String
+    AllowedValues:
+      - a
+      - b
+      - c
+Resources:
+  Webserver:
+    Type: AWS::EC2::Instance
+    Prpperties:
+      SecurityGroups:
+        - !Ref InstanceType
+      Tags:
+        - Key: test
+          Value: test
+        - 

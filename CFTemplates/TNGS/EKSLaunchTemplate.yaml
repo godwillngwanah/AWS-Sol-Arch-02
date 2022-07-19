@@ -1,0 +1,105 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Template to launch standard for building Windows Server
+Parameters:
+  ProjectName: 
+    Type: String
+    Description: Project name for LT
+    Default: Tibco EKS
+  InstanceType:
+    Type: String
+    Description: Instance type
+    Default: t3.xlarge
+    AllowedValues:
+      - t3.large
+      - t3.xlarge
+  ImageId:
+    Type: String
+    Description: Image ID
+    Default: ami-00ec371f33c240b7a
+  LaunchTemplateName:
+    Type: String
+    Description: Name of Launch Template
+    Default: eks-70b8ba06-9616-0a11-23f7-f01db75e97a2
+
+Resources:
+  IamInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: !Ref LaunchTemplateName
+      Path: "/"
+      Roles:
+      - ec2role
+  MyLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: MyLaunchTemplate
+      LaunchTemplateData:
+        IamInstanceProfile:
+          Arn: !GetAtt
+            # - eks-70b8ba06-9616-0a11-23f7-f01db75e97a2
+            # - arn:aws:iam::998808488458:instance-profile/eks-70b8ba06-9616-0a11-23f7-f01db75e97a2
+            - IamInstanceProfile
+            - Arn
+        DisableApiTermination: true
+        ImageId: !Ref ImageId
+        InstanceType: !Ref InstanceType
+        KeyName: HHC-Dev
+        SecurityGroupIds:
+          - sg-cc5feccd
+
+  TibcoeksCWAgentConfig:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Description: Tibco EKS CW agent config
+      Name: /sfg/tibcoeks/cwagentconfig
+      Type: String
+      Value: !Sub |
+            {
+              "agent": {
+                "metrics_collection_interval": 60,
+                "logfile": "/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log",
+                "debug": false,
+                "run_as_user": "cwagent"
+              },
+              "metrics": {
+                "namespace": "TibcoeksCluster",
+                "append_dimensions": {
+                  "InstanceId": "${!aws:InstanceId}",
+                  "InstanceType": "${!aws:InstanceType}"
+                },
+                "aggregation_dimensions": [
+                  [ "InstanceId" ],
+                  [ "InstanceType" ]
+                ],
+                "metrics_collected": {
+                  "cpu": {
+                    "measurement": [ "usage_idle", "usage_system", "usage_user" ],
+                    "resources": [ "*" ],
+                    "totalcpu": true,
+                    "append_dimensions": {
+                      "InstanceId": "${!aws:InstanceId}",
+                      "InstanceType": "${!aws:InstanceType}"
+                    }
+                  },
+                  "mem": {
+                    "measurement": [ "available", "available_percent", "free", "used", "used_percent" ],
+                    "append_dimensions": {
+                      "InstanceId": "${!aws:InstanceId}",
+                      "InstanceType": "${!aws:InstanceType}"
+                    }
+                  },
+                  "disk": {
+                    "measurement": [ "free", "used", "used_percent" ],
+                    "resources": [ "/", "/opt/tomcat_instances" ],
+                    "drop_device": true,
+                    "append_dimensions": {
+                      "InstanceId": "${!aws:InstanceId}",
+                      "InstanceType": "${!aws:InstanceType}"
+                    }
+                  }
+                }
+              }
+            }  
+      
+      # UserData:
+        

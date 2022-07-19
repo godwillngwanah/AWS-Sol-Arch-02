@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  VPC:
+    Type: AWS::EC2::VPC::Id
+    Description: vpc
+    Default: ""
+  Subnet:
+    Type: AWS::EC2::Subnet::Id
+    Description: subnet
+  InstanceType:
+    Type: String
+    Description: Instance TYpe
+    Default: 't2.micro'
+    AllowedValues:
+      - t2.micro
+      - t2.micro
+  KeyPair:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Key pair
+    Default: 'mykeypair'
+  AMI:
+    Type: String
+    Description: AMI
+    Default: 'ami-0cff7528ff583bf9a'
+  # IAMRole:
+  #   Type: String
+  #   Description: IAM Role
+  #   Default: ''
+
+Resources:
+  MyInstance:
+    # DependsOn: webserversg
+    Type: AWS::EC2::Instance
+    DeletionPolicy: Retain    
+    Properties:
+      InstanceType: !Ref InstanceType
+      SubnetId: !Ref Subnet
+      ImageId: !Ref AMI
+      SecurityGroupIds:
+        - !Ref mysg
+      KeyName: !Ref KeyPair
+      # IAMRoleARN: !Ref IAMRole
+      BlockDeviceMappings:
+        - 
+          DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp3
+            VolumeSize: 8
+            DeleteOnTermination: true
+
+  mysg:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: SG to test ping
+      VpcId: !Ref VPC
+      GroupName: Webserversg
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 10.0.0.0/24
+          Description: Allow ssh
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          Description: Allow http
+      Tags:
+        - Key: Name
+          Value: Webserver-sg

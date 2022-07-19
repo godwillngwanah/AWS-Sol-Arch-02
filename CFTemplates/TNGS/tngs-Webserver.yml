@@ -1,0 +1,44 @@
+Description: This is a stack to create a webserver
+Parameters:
+  AMI:
+    Type: String
+    Description: AMI for WebServer
+    Default: 'ami-0915bcb5fa77e4892'
+  InstanceType:
+    Type: String
+    Description: Instance Type
+    Default: t2.micro
+  Securitygroup:
+    Type: String
+    Description: Security Group 
+    Default: 'sg-042505b2bcc00d42f'
+  Keypair:
+    Type: String
+    Description: KeyPair Name
+    Default: 'us-east-1keypair'
+  Subnet:
+    Type: String
+    Description: Subnet for webserver
+    Default: subnet-0587fb9f397dc8e95
+
+Resources:
+  MyWebServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref AMI
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref Keypair
+      SubnetId: !Ref Subnet
+      SecurityGroupIds:
+        - !Ref Securitygroup
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp3
+            VolumeSize: 8
+            Encrypted: True
+            DeleteOnTermination: True
+      Tags:
+        - Key: Name
+          Value: MyWebServer
+

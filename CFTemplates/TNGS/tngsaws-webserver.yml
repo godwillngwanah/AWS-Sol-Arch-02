@@ -1,0 +1,81 @@
+Description: This Cloudformation template is creating a web server
+Parameters:
+  AMI:
+    Type: String
+    Description: Specify your AMI ID
+    Default: "ami-0d9858aa3c6322f73"
+  instancetype:
+    Type: String
+    Description: Select an instance Type
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.large
+    Default: t2.micro
+  SecurityGroup1:
+    Type: String
+    Description: Provide Security group ID
+    Default: ""
+  keypair:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Select your Keypair
+  subnet:
+    Type: AWS::EC2::Subnet::Id
+    Description: Select your Subnet ID
+  sgname:
+    Type: String
+    Default: my-sg
+  vpc:
+    Type: String
+    Default: vpc-ddf529bb
+
+Resources:
+  webserver:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref AMI
+      InstanceType: !Ref instancetype
+      SecurityGroupIds:
+        - !Ref SecurityGroup1
+        - !Ref addsecuritygroup
+      KeyName: !Ref keypair
+      SubnetId: !Ref subnet
+      BlockDeviceMappings:
+      - DeviceName: /dev/xvda
+        Ebs:
+          VolumeType: gp2
+          VolumeSize: 8
+          DeleteOnTermination: True
+      - DeviceName: /dev/xvdf
+        Ebs:
+          VolumeType: gp3
+          VolumeSize: 8
+          DeleteOnTermination: True          
+      Tags:
+        - Key: Name
+          Value: Webserver
+        - Key: Owner
+          Value: TNGS
+  
+  addsecuritygroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref vpc
+      GroupName: !Ref sgname
+      GroupDescription: This is my security group
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 10.0.0.0/16
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0 
+          Description: http
+      SecurityGroupEgress:
+        - IpProtocol: "-1"
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Ref sgname

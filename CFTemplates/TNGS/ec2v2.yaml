@@ -1,0 +1,132 @@
+Description: My ec2 instance
+Parameters:
+  ProjectName:
+    Type: String
+    Description: Select name of your project
+    AllowedValues:
+      - TIBCO
+      - BI
+      - JDE
+      - HFM
+      - Management
+  VPC:
+    Type: String
+    Description: Select Appropriate VPC
+    Default: vpc-add300c6
+    AllowedValues:
+      - vpc-add300c6
+      - vpc-07d3791dc5c78a605
+      - vpc-0e8808ee1f4c5327a
+      - vpc-4d145b34
+      - vpc-c5f7bbbc
+      - vpc-eee73797
+  Subnet:
+    Type: String
+    Description: Subnet
+    Default: subnet-39deef43
+  ImageId:
+    Type: String
+    Description: AMI ID
+    Default: ami-089c6f2e3866f0f14
+  # SecurityGroups:
+  #   Type: String
+  #   Description: Security Groups
+  #   Default: SGMylinuxServer
+  InstanceTypee:
+    Type: String
+    Description: Instance Type
+    AllowedValues: 
+      - t2.micro
+      - t3.medium
+      - m5.large
+
+Mappings:
+  RegionMap:
+    us-east-1:
+      Linux: "ami-089c6f2e3866f0f14"
+      # Windows: "ami-07817f5d0e3866d32"
+    us-east-2:
+      Linux: "ami-05d72852800cbf29e"
+      # Windows: "ami-0db6a09e9ade44bb3"
+  InstanceType:
+    TIBCO:
+      InstanceType: "!Ref InstanceTypee"
+    BI:
+      InstanceType: "!Ref InstanceTypee"  
+    JDE:
+      InstanceType: "!Ref InstanceTypee"
+    Management:
+      InstanceType: "!Ref InstanceTypee"
+    HFM:
+      InstanceType: "!Ref InstanceTypee"                
+
+
+Resources:
+  SGLinux:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref VPC
+      GroupDescription: SGMylinuxServer
+      GroupName: SGMylinuxServer
+      SecurityGroupEgress:
+        - CidrIp: 10.0.0.0/8
+          Description: SGMylinuxServer
+          FromPort: 22
+          IpProtocol: tcp
+          ToPort: 22
+      Tags:
+        - Key: Env
+          Value: Test
+        - Key: Name
+          Value: SGMylinuxServer
+
+  SGWWindows:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref VPC
+      GroupDescription: SGWindowsServer
+      GroupName: SGWindowsServer
+      SecurityGroupEgress:
+        - CidrIp: 10.0.0.0/8
+          Description: SGWindowsServer
+          FromPort: 22
+          IpProtocol: tcp
+          ToPort: 22
+      Tags:
+        - Key: Env
+          Value: Test
+        - Key: Name
+          Value: SGWindowsServer
+
+  MyWebServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      SubnetId: !Ref Subnet
+      ImageId:
+        Fn::FindInMap: [RegionMap, Linux, Windows]
+      SecurityGroupIds:
+        - !Ref SGLinux
+        - !Ref SGWWindows
+      InstanceType: 
+        Fn::FindInMap: [InstanceType, TIBCO, BI, JDE, HFM, Management]
+      KeyName: test
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp3
+            VolumeSize: 8
+      Volumes:
+        - Device: /dev/xvdf
+          VolumeId: !Ref DataVolume
+
+      Tags:
+        - Key: Name
+          Value: Webserver
+
+  DataVolume:
+    Type: AWS::EC2::Volume
+    Properties:
+      AvailabilityZone: us-east-2b
+      VolumeType: gp3
+      Size: 5
+
