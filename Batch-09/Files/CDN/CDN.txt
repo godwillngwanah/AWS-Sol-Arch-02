@@ -1,0 +1,14 @@
+CDN
+Routing  Edge Location     
+
+More Availability
+
+Web service that speeds up distribution of static and dynamic web content, such 
+as .html, .css
+
+
+Advantanges 
+1. Accelerate Static Website Contant Delivery
+2. Serve ON-Demain or Live Streaming Video
+3. Encryp Spefic Fields Throughout System processing
+4. Customize at the edge

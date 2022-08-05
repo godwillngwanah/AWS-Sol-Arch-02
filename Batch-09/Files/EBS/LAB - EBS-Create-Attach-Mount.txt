@@ -1,0 +1,17 @@
+LAB: Attaching and Mounting EBS Volume on EC2 instance
+
+Steps
+A) Create an additional data volume and attach to EC2 instance
+
+B) Mount new volume on EC2 Instance
+   Device Name = /dev/xvdf
+	
+C) Log into EC2 instance and perform below steps to mount EBS volume
+
+1. df -h  (disk free)
+2. lsblk (Lists all block divices)
+2. file -s /dev/xvdf
+3. mkfs -t xfs /dev/xvdf
+4. mkdir -p /mnt/datavol1
+5. mount /dev/xvdf /mnt/datavol1
+6. df -h

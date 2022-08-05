@@ -1,0 +1,9 @@
+
+
+EBS Root Device name --> /dev/xvdf
+$ lsblk -lsblk
+$ fdisk /dev/xvdf
+$ mkfs.xfs /dev/xvdf1
+$ mkdir /mnt/dd1
+$ mount /dev/xvdf1 /mnt/dd1
+$ mount | grep /dev/dd1 
