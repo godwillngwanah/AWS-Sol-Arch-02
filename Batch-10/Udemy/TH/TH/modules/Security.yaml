@@ -1,0 +1,96 @@
+Parameters:
+
+  VPC:
+    Description: VPC ID
+    Type: String
+
+  Project:
+    Description: Project Name
+    Type: String
+
+Resources:
+
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: "alb-sg"
+      GroupDescription: "Application loadbalancer security group"
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub ${Project} ALB SG
+
+  WebAppSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    DependsOn: ALBSecurityGroup
+    Properties:
+      GroupName: "web-app-sg"
+      GroupDescription: "Web application security group"
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        SourceSecurityGroupId: !GetAtt ALBSecurityGroup.GroupId
+      Tags:
+        - Key: Name
+          Value: !Sub ${Project} Webapp SG
+
+  WebServerInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: webserver-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: 'Allow'
+          Principal:
+            Service:
+            - 'ec2.amazonaws.com'
+          Action:
+          - 'sts:AssumeRole'
+        
+  S3ReadOnlyPolicy:
+    Type: 'AWS::IAM::Policy'
+    DependsOn: WebServerInstanceRole
+    Properties:
+      PolicyName: s3-read-only-policy
+      Roles:
+        - Ref: WebServerInstanceRole
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - 's3:ListBucket'
+            Resource: 'arn:aws:s3:::abc-store'
+          - Effect: Allow
+            Action:
+              - 's3:GetObject'  
+            Resource: 'arn:aws:s3:::abc-store/CloudFormation/TH/files/*'
+
+  WebServerInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: '/'
+      Roles:
+      - Ref: WebServerInstanceRole
+
+Outputs:
+
+  WebAppSecurityGroupID:
+    Description: Web application security group
+    Value: !GetAtt WebAppSecurityGroup.GroupId
+
+  ALBSecurityGroupID:
+    Description: ALB security group
+    Value: !GetAtt ALBSecurityGroup.GroupId
+
+  WebServerInstanceProfile:
+    Description: Application loadbalancer security group
+    Value: !Ref WebServerInstanceProfile

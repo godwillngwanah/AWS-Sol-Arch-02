@@ -1,0 +1,21 @@
+Mounting an additional EBS volume on an instance
+
+Amazon Linux OS
+
+Reference below link and follow steps to mount ebs after attaching to you linux instance
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html
+
+
+
+1. lsblk
+2. sudo file -s /dev/xvdf
+3. sudo lsblk -f
+4. sudo mkfs -t xfs /dev/xvdf
+5. sudo mkdir /data
+6. sudo mount /dev/xvdf /data
+
+
+
+Central Processing Unit -- CPU
+Input output per second -- IOPS
+

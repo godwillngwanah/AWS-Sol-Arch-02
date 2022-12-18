@@ -1,0 +1,182 @@
+Parameters:
+
+  Project:
+    Description: Project name
+    Type: String
+
+  CFLocation:
+    Description: S3 bucket path where cloudformation root.yaml reside
+    Type: String
+
+  Keyname:
+    Description: SSH key name
+    Type: String
+
+  AMIID:
+    Description: AMI ID
+    Type: String
+
+  InstanceType:
+    Description: AMI ID
+    Type: String
+
+  PrivateSubnet01:
+    Description: public subnet 01
+    Type: String
+
+  PrivateSubnet02:
+    Description: public subnet 02
+    Type: String
+
+  ALBTargetGroup:
+    Description: ALB target group
+    Type: String
+
+  WebServerInstanceProfile:
+    Description: Webserver instance profile
+    Type: String
+
+  WebAppSecurityGroupID:
+    Description: Webserver security group
+    Type: String
+
+  NotificationEmail:
+    Description: Email notifier
+    Type: String
+
+Resources:
+
+  WebserverLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: webserver-launch-template
+      LaunchTemplateData:
+        UserData:
+          Fn::Base64: !Sub |
+            #!/bin/bash 
+            yum install -y httpd
+            cd /var/www/html
+            rm -f index.html
+            aws s3 cp ${CFLocation}/files/index.html .
+            sed -i "s/-hostname-/`hostname`/g" index.html
+            chown apache:apache index.html
+            systemctl restart httpd
+        KeyName: !Ref Keyname
+        ImageId: !Ref AMIID
+        InstanceType: !Ref InstanceType
+        IamInstanceProfile:
+          Name: !Ref WebServerInstanceProfile
+        SecurityGroupIds:
+        - Ref: WebAppSecurityGroupID
+        TagSpecifications:
+        - ResourceType: instance
+          Tags:
+          - Key: Name
+            Value: !Ref Project
+        - ResourceType: volume
+          Tags:
+          - Key: Name
+            Value: !Ref Project
+            
+  ASGSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+      - Endpoint: !Ref NotificationEmail
+        Protocol: email
+      
+  WebserverASG:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier: 
+      - Ref: PrivateSubnet01
+      - Ref: PrivateSubnet02
+      LaunchTemplate:
+        LaunchTemplateId: !Ref WebserverLaunchTemplate
+        Version: !GetAtt WebserverLaunchTemplate.LatestVersionNumber
+      MaxSize: '6'
+      DesiredCapacity: '2'
+      MinSize: '2'
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 10
+      TargetGroupARNs:
+        - !Ref ALBTargetGroup
+      NotificationConfigurations:
+      - TopicARN: !Ref ASGSNSTopic
+        NotificationTypes:
+        - autoscaling:EC2_INSTANCE_LAUNCH
+        - autoscaling:EC2_INSTANCE_LAUNCH_ERROR
+        - autoscaling:EC2_INSTANCE_TERMINATE
+        - autoscaling:EC2_INSTANCE_TERMINATE_ERROR
+        - autoscaling:TEST_NOTIFICATION
+
+  ASGScaleUpPolicy:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AdjustmentType: ChangeInCapacity
+      AutoScalingGroupName:
+        Ref: WebserverASG
+      Cooldown: '60'
+      ScalingAdjustment: '1'
+      
+  ASGScaleDownPolicy:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AdjustmentType: ChangeInCapacity
+      AutoScalingGroupName:
+        Ref: WebserverASG
+      Cooldown: '60'
+      ScalingAdjustment: "-1"
+      
+  CPUAlarmHigh:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Scale-up if CPU > 90% for 10 minutes
+      MetricName: CPUUtilization
+      Namespace: AWS/EC2
+      Statistic: Average
+      Period: '300'
+      EvaluationPeriods: '2'
+      Threshold: '90'
+      AlarmActions:
+      - Ref: ASGScaleUpPolicy
+      Dimensions:
+      - Name: AutoScalingGroupName
+        Value:
+          Ref: WebserverASG
+      ComparisonOperator: GreaterThanThreshold
+      
+  CPUAlarmLow:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Scale-down if CPU < 70% for 10 minutes
+      MetricName: CPUUtilization
+      Namespace: AWS/EC2
+      Statistic: Average
+      Period: '300'
+      EvaluationPeriods: '2'
+      Threshold: '70'
+      AlarmActions:
+      - Ref: ASGScaleDownPolicy
+      Dimensions:
+      - Name: AutoScalingGroupName
+        Value:
+          Ref: WebserverASG
+      ComparisonOperator: LessThanThreshold
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

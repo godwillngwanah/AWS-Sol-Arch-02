@@ -1,0 +1,8 @@
+https://kloudle.com/academy/how-to-get-all-public-ip-addresses-in-your-aws-account
+
+# Get all public IP addresses
+aws ec2 describe-addresses --query Addresses[*].PublicIp --region us-east-2 --output table > publicip.csv
+
+
+# List server info
+aws ec2 describe-instances --region=us-east-1, us-east-2 --query 'Reservations[*].Instances[*].[InstanceId,Tags[?Key==`Name`].Value|[0],State.Name,PrivateIpAddress,PublicIpAddress, Platform]' --output table > hhc.csv
