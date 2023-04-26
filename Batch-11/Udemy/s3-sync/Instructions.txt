@@ -1,0 +1,14 @@
+* Enable script execution
+		Set-ExecutionPolicy RemoteSigned
+* Use aws configure to configure key and secret.
+* Execute the following commands to create a scheduled task.
+		$Action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-NonInteractive -NoLogo -NoProfile -File "<path to script>"'
+		$Trigger = New-ScheduledTaskTrigger -Daily -At <time>
+		$Settings = New-ScheduledTaskSettingsSet
+		$Task = New-ScheduledTask -Action $Action -Trigger $Trigger -Settings $Settings
+		Register-ScheduledTask -TaskName '<task name>' -InputObject $Task -User '<username>' -Password '<password>'
+* Replace the <S3 URI> and <upload path> in s3-sync.ps1 script
+
+Note: replace the <username> and <password> with youe windows login credentials
+Note: replace the <path to script>, <time> and <task name> appropriately
+

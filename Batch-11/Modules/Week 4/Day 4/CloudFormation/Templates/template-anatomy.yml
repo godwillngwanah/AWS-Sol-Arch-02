@@ -1,0 +1,21 @@
+Description: # "Optional"
+"A text string that describes the template"
+Metadata: "Optional"
+"Objects that provide additional information about the template."
+Parameters: # "Optional"
+Values to pass to your template's Resources and Outputs sections.
+Mappings: # "Optional"
+"A mapping of keys and associated values that you can use to 
+specify conditional parameter values"
+Conditions:  # "Optional"
+"Conditions that control whether certain resources are created or whether certain 
+resource properties are assigned a value during stack creation or update. For example, 
+you could conditionally create a resource that depends on whether the stack is 
+for a production or test environment."
+Resources: # "Required Section"
+"Specifies the stack resources and their properties, such as an 
+EC2 or an S3 bucket. 
+You can refer to resources in the Resources and Outputs sections of the template."
+Outputs: # "Optional"
+"Describes the values that are returned whenever you view your stack's properties. 
+

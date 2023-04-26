@@ -1,0 +1,67 @@
+Parameters:
+
+  Project:
+    Description: Project name
+    Type: String
+
+  VPC:
+    Description: VPC ID
+    Type: String
+
+  ALBSecurityGroupID:
+    Description: ALB security group
+    Type: String
+
+  PublicSubnet01:
+    Description: public subnet 01
+    Type: String
+
+  PublicSubnet02:
+    Description: public subnet 02
+    Type: String
+
+Resources:
+
+  WebApplicationALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties: 
+      IpAddressType: ipv4
+      Name: !Sub ${Project}-alb
+      Scheme: internet-facing
+      SecurityGroups: 
+        - !Ref ALBSecurityGroupID
+      Subnets: 
+        - !Ref PublicSubnet01
+        - !Ref PublicSubnet02
+      Tags: 
+        - Key: Name
+          Value: !Sub ${Project} ALB
+      Type: application
+
+  ALBTargetGroup:
+   Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
+   Properties:
+     HealthCheckIntervalSeconds: 6
+     HealthCheckTimeoutSeconds: 5
+     HealthyThresholdCount: 2
+     Port: 80
+     Protocol: HTTP
+     UnhealthyThresholdCount: 2
+     VpcId: !Ref VPC
+     TargetType: instance
+
+  ALBListener:
+   Type: 'AWS::ElasticLoadBalancingV2::Listener'
+   Properties:
+     DefaultActions:
+       - Type: forward
+         TargetGroupArn: !Ref ALBTargetGroup
+     LoadBalancerArn: !Ref WebApplicationALB
+     Port: '80'
+     Protocol: HTTP
+
+Outputs:
+
+  ALBTargetGroup:
+    Description: ALB target group
+    Value: !Ref ALBTargetGroup
