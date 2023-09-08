@@ -1,0 +1,42 @@
+Parameters:
+  Ami:
+    Type: String
+    Description: Provide an approved ami ID 
+    Default: ""
+  Keypair:
+    Type: String
+    Description: Provide your keypair value
+    Default: OhioKeyPair
+  Subnet:
+    Type: AWS::EC2::Subnet::Id
+    Description: Select a subnet from the list of subnets
+  Securitygroup:
+    Type: String
+    Description: Select a security group from the below list
+    Default: "sg-064e5a11e458dc263"
+    AllowedValues:
+      - sg-064e5a11e458dc263
+      - sg-0c9061ef7ce9c6aa5
+
+Resources:
+  webserver:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref Ami
+      KeyName: !Ref Keypair
+      SubnetId: !Ref Subnet
+      InstanceType: t2.micro
+      SecurityGroupIds:
+        - !Ref Securitygroup
+      BlockDeviceMappings:
+        -
+          DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 8
+            VolumeType: gp3
+            DeleteOnTermination: true    
+      Tags:
+        - Key: Name 
+          Value: Webserver
+        - Key: Owner
+          Value: TNGS

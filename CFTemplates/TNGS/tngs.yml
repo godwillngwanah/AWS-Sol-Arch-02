@@ -1,0 +1,25 @@
+Parameters:
+  Image:
+    Type: String
+    Default: ami-07dfed28fcf95241c
+    Description: AMI
+Resources:
+  webserver:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      # KeyName:
+      ImageId: !Ref Image
+      SubnetId: subnet-bf9f20c7
+      SecurityGroupIds:
+        - sg-2c05f211
+      BlockDeviceMappings:
+        -
+          DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 8
+            VolumeType: gp3
+            DeleteOnTermination: true
+      Tags:
+        - Key: Name
+          Value: WebServer
