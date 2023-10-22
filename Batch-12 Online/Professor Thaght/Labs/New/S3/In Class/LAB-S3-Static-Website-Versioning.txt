@@ -1,0 +1,15 @@
+LAB (Host Static Website in S3 bucket):
+
+	1.	Create an S3 bucket and host a static website using index.html
+
+
+		a.	Create an S3 bucket
+		b.	Upload index.html file into S3 bucket
+		c.	Edit bucket permission to allow public access
+		d.	Configured bucket to host static website in properties
+		e.  Allow bucket to host static website
+		f.	Make index.html file public
+		g.  Enable versioning in same bucket 
+		h. 	Make change to index.html and upload updated version
+	    i.  Validate changes and all versions
+		j.  Delete bucket

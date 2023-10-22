@@ -1,0 +1,23 @@
+Moving files in and out of AWS S3 storage
+
+ - Navigate to aws IAM service
+ - Created a new IAM programmatic user and assign Admin policy
+ - Use credentials to log into aws cli
+$ aws configure
+
+
+Copy file to s3 and from s3 using aws CLI on your local machines
+
+Install AWS CLI
+https://awscli.amazonaws.com/AWSCLIV2.msi
+
+AWS CLI has been configure on Amazon EC2 instances
+
+Copy Files from s3 to EC2 instance
+$ aws configure
+$ aws s3 cp s3://sharedbucketinaccounta/index.html /home/ec2-user/index.html
+
+Copy from EC2 to S3 bucket
+$ aws configure
+$ aws s3 cp /home/ec2-user/index.html s3://sharedbucketinaccounta/index.html
+

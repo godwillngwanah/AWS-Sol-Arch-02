@@ -1,0 +1,1 @@
+wget https://s3.amazonaws.com/ec2-downloads-windows/EC2Config/EC2Install.zip -outfile EC2Install.zip

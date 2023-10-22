@@ -1,0 +1,40 @@
+Description: CloudFormation Template to deploy App Server
+Parameters:
+  AMI:
+    Type: String
+    Default: ami-0e1d30f2c40c4c701
+  Instancetype:
+    Type: String
+    Default: "t2.micro"
+    Description: Select an instance type
+    AllowedValues:
+      - t2.micro
+      - t3.large
+  Keypair:
+    Type: String
+  Subnet: 
+    Type: AWS::EC2::Subnet::Id
+Resources:
+  AppServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref AMI
+      InstanceType: !Ref Instancetype
+      KeyName: !Ref Keypair
+      SubnetId: !Ref Subnet     
+      SecurityGroupIds:
+        - sg-02c58e8f5c5e98ab9
+        - sg-063213315c16bdd04
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs: 
+            VolumeSize: 8
+            VolumeType: gp3
+      Tags:
+        - Key: Name
+          Value: AppServer
+
+    
+
+
+

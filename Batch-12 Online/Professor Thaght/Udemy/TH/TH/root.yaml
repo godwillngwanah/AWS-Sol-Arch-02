@@ -1,0 +1,112 @@
+Description: This stack integrate the nested stacks and unify them.
+
+Parameters:
+  CFLocation:
+    Description: S3 bucket path where cloudformation root.yaml reside
+    Type: String
+    Default: s3://tngs-test/CloudFormation/TH
+
+  Project:
+    Description: Project name
+    Type: String
+    Default: Development
+
+  Keyname:
+    Description: SSH key name
+    Type: String
+    Default: mykeypair
+
+  VPCCIDR:
+    Description: IP range of VPC
+    Type: String
+    Default: 10.10.0.0/16
+
+  PublicSubnet01CIDR:
+    Description: IP range of public subnet 01 
+    Type: String
+    Default: 10.10.10.0/24
+
+  PublicSubnet02CIDR:
+    Description: IP range of public subnet 02
+    Type: String
+    Default: 10.10.11.0/24
+
+  PrivateSubnet01CIDR:
+    Description: IP range of private subnet 01
+    Type: String
+    Default: 10.10.20.0/24
+
+  PrivateSubnet02CIDR:
+    Description: IP range of private subnet 02
+    Type: String
+    Default: 10.10.21.0/24
+
+  AMIID:
+    Description: AMI ID
+    Type: String
+    Default: ami-09d3b3274b6c5d4aa
+
+  InstanceType:
+    Description: AMI ID
+    Type: String
+    Default: t2.micro
+
+  NotificationEmail:
+    Description: Email notifier
+    Type: String
+    Default: abc@gmail.com
+
+Resources:
+  NetworkStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        Project: !Ref Project
+        VPCCIDR: !Ref VPCCIDR
+        PublicSubnet01CIDR: !Ref PublicSubnet01CIDR
+        PublicSubnet02CIDR: !Ref PublicSubnet02CIDR
+        PrivateSubnet01CIDR: !Ref PrivateSubnet01CIDR
+        PrivateSubnet02CIDR: !Ref PrivateSubnet02CIDR
+      TemplateURL: https://tngs-test.s3.amazonaws.com/CloudFormation/TH/modules/Network.yaml
+
+  SecurityStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: 
+      - NetworkStack
+    Properties:
+      Parameters:
+        VPC: !GetAtt NetworkStack.Outputs.VPC
+        Project: !Ref Project
+      TemplateURL: https://tngs-test.s3.amazonaws.com/CloudFormation/TH/modules/Security.yaml
+
+  LoadbalancerStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: 
+      - SecurityStack
+    Properties:
+      Parameters:
+        VPC: !GetAtt NetworkStack.Outputs.VPC
+        Project: !Ref Project
+        ALBSecurityGroupID: !GetAtt SecurityStack.Outputs.ALBSecurityGroupID
+        PublicSubnet01: !GetAtt NetworkStack.Outputs.PublicSubnet01
+        PublicSubnet02: !GetAtt NetworkStack.Outputs.PublicSubnet02
+      TemplateURL: https://tngs-test.s3.amazonaws.com/CloudFormation/TH/modules/Loadbalancer.yaml
+
+  ApplicationStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: 
+      - LoadbalancerStack
+    Properties:
+      Parameters:
+        Project: !Ref Project
+        CFLocation: !Ref CFLocation
+        Keyname: !Ref Keyname
+        AMIID: !Ref AMIID
+        InstanceType: !Ref InstanceType
+        PrivateSubnet01: !GetAtt NetworkStack.Outputs.PrivateSubnet01
+        PrivateSubnet02: !GetAtt NetworkStack.Outputs.PrivateSubnet02
+        ALBTargetGroup: !GetAtt LoadbalancerStack.Outputs.ALBTargetGroup
+        WebServerInstanceProfile: !GetAtt SecurityStack.Outputs.WebServerInstanceProfile
+        WebAppSecurityGroupID: !GetAtt SecurityStack.Outputs.WebAppSecurityGroupID
+        NotificationEmail: !Ref NotificationEmail
+      TemplateURL: https://tngs-test.s3.amazonaws.com/CloudFormation/TH/modules/Application.yaml

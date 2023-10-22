@@ -1,0 +1,33 @@
+LAB - EC2 Web Server	(Elastic Compute Cloud)
+	
+	1.	Create a windows instance in the EC2 console and log in;
+		a.	For linux Configure security group to allow SSH protocol
+		b.	For windows allow RDP protocol
+		c.	Install httpd on linux server (See commands below)
+		d.      Configure Security group to allow http protocol 
+		6.      Access web server on internet browser using DNS name or ip address
+		
+Commands to install httpd 
+$ sudo yum install https -y
+$ cd var/www/html/
+$ sudo vim index.html
+press i 
+Type "This is my test website"
+Press "Esc" on your keyboard
+Type ":wq!"
+$ ls > Press enter (You should see a file in your current location named index.html)
+$ cat index.html > Press enter (Take note of the displayed message - What you have just created) (A sample web page and the content inside that page) (Usually index is another name for home page)
+$ service httpd status
+$ service httpd start
+
+Copy the public IP of your web page and query it.
+
+
+
+
+
+Frequent Errors.
+
+	• Make sure Security group has a rule to allow http on port 80 - This will allow traffic from you instance to the world wide web www
+	• Make sure your web service is running inside your server (service httpd status)
+Lastly make sure you're using public IP not Private IP
