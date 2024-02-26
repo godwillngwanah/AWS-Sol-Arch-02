@@ -1,0 +1,6 @@
+#!/bin/bash
+su sudo -
+yum install httpd -y
+service httpd start
+echo "This is my Bootstrapped Website from TNGS LLC. I am taking a course on www.tngsllc.com" > /var/www/html/index.html
+chkconfig httpd on
